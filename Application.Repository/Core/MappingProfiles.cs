@@ -1,4 +1,5 @@
 ﻿using Application.Repository.DTO.Admin;
+using Application.Repository.DTO.Common;
 using Application.Repository.DTO.User;
 using Application.Repository.Entities;
 using AutoMapper;
@@ -15,6 +16,10 @@ namespace Application.Repository.Core
             CreateMap<UserUpdateDTO, User>()
                 .ForMember(dest => dest.ProfilePicture, opt => opt.Ignore())
                 .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+            CreateMap<AdminUserCreateDTO, User>()
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => Guid.NewGuid()))
+                .ForMember(dest => dest.ProfilePicture, opt => opt.Ignore());
         }
     }
 }
