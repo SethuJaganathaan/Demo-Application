@@ -1,6 +1,5 @@
 ﻿using Application.Repository.DTO.Common;
 using Application.Service.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.API.Controllers
@@ -20,6 +19,13 @@ namespace Application.API.Controllers
         {
             var newUser = await _registrationService.SignUp(user);
             return Ok(newUser);
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromForm]LoginDTO login)
+        {
+            var signIn = await _registrationService.Login(login);
+            return Ok(signIn);
         }
     }
 }

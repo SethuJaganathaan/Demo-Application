@@ -1,4 +1,5 @@
 using Application.API.Extensions;
+using Application.Repository.DTO.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,8 +10,13 @@ var configuration = new ConfigurationBuilder()
 .AddJsonFile("appsettings.json")
 .Build();
 
+var _jwtsetting = builder.Configuration.GetSection("JWTSetting");
+builder.Services.Configure<JWTSetting>(_jwtsetting);
+var authkey = builder.Configuration.GetValue<string>("JWTSetting:SecurityKey");
+
 builder.Services.ConfigureScope(configuration);
 builder.Services.ConfigureServices(configuration);
+
 
 var app = builder.Build();
 

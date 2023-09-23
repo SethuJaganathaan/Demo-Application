@@ -12,6 +12,11 @@ namespace Application.Service.Services
             _registrationRepository = registrationRepository;
         }
 
+        public async Task<BaseResponse> Login(LoginDTO login)
+        {
+            return await _registrationRepository.Login(login);
+        }
+
         public async Task<string> SignUp(AdminUserCreateDTO user)
         {
             return await _registrationRepository.SignUp(user);

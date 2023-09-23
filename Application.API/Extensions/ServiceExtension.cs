@@ -8,6 +8,7 @@ using Application.Service.Services;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Serilog;
 
 namespace Application.API.Extensions
@@ -21,7 +22,7 @@ namespace Application.API.Extensions
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
-            
+
             services.AddScoped<IUserManagementRepository, UserManagementRepository>();
             services.AddScoped<IUserManagementService, UserManagementService>();
 
@@ -48,6 +49,31 @@ namespace Application.API.Extensions
             {
                 x.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
             });
+
+            services.AddSwaggerGen(c => c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Enter Your Token Here",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "bearer"
+            }));
+
+            services.AddSwaggerGen(w => w.AddSecurityRequirement(new OpenApiSecurityRequirement
+             {
+                {
+                   new OpenApiSecurityScheme
+                   {
+                      Reference = new OpenApiReference
+                      {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                      }
+                   },
+                   new string[] {}
+                }
+             }));
 
             services.AddControllers();
             services.AddEndpointsApiExplorer();
