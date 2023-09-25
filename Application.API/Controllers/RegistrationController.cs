@@ -25,7 +25,7 @@ namespace Application.API.Controllers
         public async Task<IActionResult> Login([FromForm]LoginDTO login)
         {
             var signIn = await _registrationService.Login(login); 
-            return Ok(signIn);
+            return Ok(signIn); 
         }
     }
 }
