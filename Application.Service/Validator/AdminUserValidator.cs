@@ -25,11 +25,6 @@ namespace Application.Service.Validator
             RuleFor(x => x.ProfilePicture)
                 .NotNull().WithMessage("Profilepicture is required");
 
-            RuleFor(x => x.Status)
-                .NotNull().WithMessage("Status is required")
-                .WithMessage("Status must have a value (true or false)");
-
-
             RuleFor(x => x.RoleId)
                 .NotEmpty().WithMessage("RoleId is required");
 

@@ -3,7 +3,6 @@ using Application.Repository.DTO.Common;
 using Application.Repository.DTO.User;
 using Application.Repository.Entities;
 using AutoMapper;
-using Microsoft.VisualBasic;
 
 namespace Application.Repository.Core
 {
@@ -20,6 +19,7 @@ namespace Application.Repository.Core
             CreateMap<AdminUserCreateDTO, User>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => Guid.NewGuid()))
                 .ForMember(dest => dest.ProfilePicture, opt => opt.Ignore());
+
         }
     }
 }

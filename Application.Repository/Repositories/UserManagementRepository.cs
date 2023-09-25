@@ -15,7 +15,7 @@ namespace Application.Repository.Repositories
 
         public async Task<object> UserManagementByRoleid(Guid Roleid)
         {
-            bool isSuperAdmin = Roleid == new Guid("564C7BAC-C729-470C-90B1-FFDDC7B85747");
+            bool isSuperAdmin = Roleid == new Guid("8783F704-4F57-42F1-879B-C056DF45CDD0");
 
             return isSuperAdmin
                 ? await (from Roles in _dbcontext.Roles
@@ -33,7 +33,7 @@ namespace Application.Repository.Repositories
                 : new
                 {
                     UserCount = await _dbcontext.Users.CountAsync(u => u.RoleId == Roleid),
-                    SuperAdminCount = await _dbcontext.Users.CountAsync(u => u.RoleId == new Guid("564C7BAC-C729-470C-90B1-FFDDC7B85747"))
+                    SuperAdminCount = await _dbcontext.Users.CountAsync(u => u.RoleId == new Guid("8783F704-4F57-42F1-879B-C056DF45CDD0"))
                 };
         }
     }

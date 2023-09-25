@@ -22,5 +22,19 @@ namespace Application.Repository.Repositories
             var userDTO = _mapper.Map<List<UserDTO>>(users);
             return userDTO;
         }
+
+        public async Task<bool> SoftDeleteUser(Guid userId)
+        {
+            var user = await _dbcontext.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+
+            if (user != null)
+            {
+                user.IsDeleted = true;
+                await _dbcontext.SaveChangesAsync();
+                return true; 
+            }
+            return false;
+        }
+
     }
 }

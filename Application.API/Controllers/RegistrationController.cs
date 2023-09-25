@@ -1,5 +1,6 @@
 ﻿using Application.Repository.DTO.Common;
 using Application.Service.Interfaces;
+using Application.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.API.Controllers
@@ -26,6 +27,14 @@ namespace Application.API.Controllers
         {
             var signIn = await _registrationService.Login(login); 
             return Ok(signIn); 
+        }
+
+
+        [HttpGet("email")]
+        public async Task<IActionResult> GetUser(string email)
+        {
+            var user = await _registrationService.GetUser(email);
+            return Ok(user);
         }
     }
 }
