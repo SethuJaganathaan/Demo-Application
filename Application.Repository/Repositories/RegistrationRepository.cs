@@ -1,5 +1,6 @@
 ﻿using Application.Repository.Context;
 using Application.Repository.DTO.Common;
+using Application.Repository.DTO.User;
 using Application.Repository.Entities;
 using Application.Repository.Interfaces;
 using AutoMapper;
@@ -27,56 +28,44 @@ namespace Application.Repository.Repositories
             _setting = options.Value;
         }
 
-
         public async Task<BaseResponse> Login(LoginDTO login)
         {
-            var roleid = new SqlParameter("roleid", login.roleid);
             var email = new SqlParameter("@email", login.email);
             var password = new SqlParameter("@Password", login.password);
-            var sql = "EXEC UserLogin @roleid, @email, @Password";
+            var sql = "EXEC UserLogin @email, @Password";
 
             List<SqlParameter> parameters = new List<SqlParameter>
-        {
-            roleid,
-            email,
-            password
-        };
+            {
+                email,
+                password
+            };
 
             var result = await _dbcontext.Database.SqlQueryRaw<string>(sql, parameters.ToArray()).ToListAsync();
             string status = result.FirstOrDefault() ?? string.Empty;
 
             if (status == "LOGIN SUCCESSFUL")
             {
-                var tokenhandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_setting.SecurityKey);
-
-                var tokenDescriptor = new SecurityTokenDescriptor
+                var user = await GetUser(login.email);
+                if (user != null)
                 {
-                    Subject = new ClaimsIdentity(new Claim[]
+                    await UpdateUserLoggedInStatus(user.UserId, true);
+                    await _dbcontext.SaveChangesAsync();
+
+                    var token = GenerateToken(user);
+
+                    return new BaseResponse
                     {
-                    new Claim(ClaimTypes.Email, login.email)
-                    }),
-                    Expires = DateTime.Now.AddHours(5),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-                };
-
-                var token = tokenhandler.CreateToken(tokenDescriptor);
-                string finalToken = tokenhandler.WriteToken(token);
-
-                return new BaseResponse 
-                {
-                    Status = "Success",
-                    Token = finalToken
-                };
+                        Status = "LOGIN SUCCESSFUL",
+                        Token = token
+                    };
+                }
             }
-
             return new BaseResponse
             {
                 Status = "Failure",
-                Token = null 
+                Token = null
             };
         }
-
 
         public async Task<string> SignUp(AdminUserCreateDTO user)
         {
@@ -103,5 +92,60 @@ namespace Application.Repository.Repositories
             await _dbcontext.SaveChangesAsync();
             return result;
         }
+
+        public async Task<UserRequest> GetUser(string email)
+        {
+            var user = await _dbcontext.Users
+                .Include(u => u.Role) 
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            var userResponse = new UserRequest
+            {
+                UserId = user.UserId,
+                RoleId = user.RoleId,
+                Email = user.Email,
+                Username = user.Username,
+                RoleName = user.Role != null ? user.Role.Rolename : null,
+            };
+
+            return userResponse;
+        }
+
+        public string GenerateToken(UserRequest user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_setting.SecurityKey);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim("UserId", user.UserId.ToString()),
+                    new Claim("RoleId", user.RoleId.ToString()),
+                    new Claim("Email", user.Email),
+                    new Claim("Username", user.Username),
+                    new Claim("RoleName", user.RoleName)
+                }),
+                Expires = DateTime.Now.AddHours(10),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+
+        public async Task<bool> UpdateUserLoggedInStatus(Guid userId,bool Status)
+        {
+            var user = await _dbcontext.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+
+            if (user != null)
+            {
+                user.Status = Status;
+                await _dbcontext.SaveChangesAsync();
+                return true; 
+            }
+            return false; 
+        }
+
     }
 }

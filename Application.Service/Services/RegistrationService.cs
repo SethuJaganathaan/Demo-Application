@@ -1,4 +1,5 @@
 ﻿using Application.Repository.DTO.Common;
+using Application.Repository.DTO.User;
 using Application.Repository.Interfaces;
 using Application.Service.Interfaces;
 
@@ -20,6 +21,11 @@ namespace Application.Service.Services
         public async Task<string> SignUp(AdminUserCreateDTO user)
         {
             return await _registrationRepository.SignUp(user);
+        }
+
+        public async Task<UserRequest> GetUser(string email)
+        {
+            return await _registrationRepository.GetUser(email);
         }
     }
 }

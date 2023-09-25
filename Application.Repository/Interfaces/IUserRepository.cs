@@ -5,5 +5,7 @@ namespace Application.Repository.Interfaces
     public interface IUserRepository
     {
         Task<List<UserDTO>> GetAllUsers();
+
+        Task<bool> SoftDeleteUser(Guid userId);
     }
 }

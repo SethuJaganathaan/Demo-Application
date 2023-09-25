@@ -41,7 +41,7 @@ public partial class ApplicationContext : DbContext
     {
         modelBuilder.Entity<Department>(entity =>
         {
-            entity.HasKey(e => e.DepartmentId).HasName("PK__Departme__B2079BEDD8F21995");
+            entity.HasKey(e => e.DepartmentId).HasName("PK__Departme__B2079BEDE37486DE");
 
             entity.ToTable("Department");
 
@@ -52,7 +52,7 @@ public partial class ApplicationContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__Role__8AFACE1A66ECD390");
+            entity.HasKey(e => e.RoleId).HasName("PK__Role__8AFACE1A3EA637C3");
 
             entity.ToTable("Role");
 
@@ -62,7 +62,7 @@ public partial class ApplicationContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CC4C77B045BB");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CC4CFC09716A");
 
             entity.Property(e => e.UserId).ValueGeneratedNever();
             entity.Property(e => e.Email).HasMaxLength(50);

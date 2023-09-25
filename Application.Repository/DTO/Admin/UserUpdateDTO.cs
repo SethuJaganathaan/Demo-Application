@@ -12,8 +12,6 @@ namespace Application.Repository.DTO.Admin
 
         public IFormFile ProfilePicture { get; set; }
 
-        public bool? Status { get; set; }
-
         public Guid? RoleId { get; set; }
 
         public Guid? DepartmentId { get; set; }

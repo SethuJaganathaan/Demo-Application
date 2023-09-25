@@ -23,6 +23,8 @@ public partial class User
 
     public Guid? DepartmentId { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
     public virtual Department Department { get; set; }
 
     public virtual Role Role { get; set; }

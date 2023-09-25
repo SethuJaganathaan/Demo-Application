@@ -19,5 +19,12 @@ namespace Application.API.Controllers
             var users = await _userService.GetAllUsers();
             return Ok(users);
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> SoftDeleteUser(Guid userId)
+        {
+            var success = await _userService.SoftDeleteUser(userId);
+            return Ok(success);
+        }
     }
 }
