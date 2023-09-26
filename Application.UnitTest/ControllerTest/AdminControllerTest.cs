@@ -10,7 +10,6 @@ namespace Application.UnitTest.ControllerTest
         [Fact]
         public async Task UpdateUser_ReturnSuccess()
         {
-            // Arrange
             var userId = Guid.NewGuid();
             var userUpdateDto = new UserUpdateDTO
             {
@@ -25,13 +24,9 @@ namespace Application.UnitTest.ControllerTest
             var mockRepository = new Mock<IAdminRepository>();
             mockRepository.Setup(repo => repo.UpdateUser(userId, userUpdateDto))
                 .ReturnsAsync("Action Successful");
-
             var adminService = new AdminService(mockRepository.Object);
 
-            // Act
             var result = await adminService.UpdateUser(userId, userUpdateDto);
-
-            // Assert
             Assert.Equal("Action Successful", result);
         }
 
@@ -46,13 +41,9 @@ namespace Application.UnitTest.ControllerTest
             var mockRepository = new Mock<IAdminRepository>();
             mockRepository.Setup(repo => repo.UpdateUser(userId, userUpdateDto))
                 .ReturnsAsync(output);
-
             var adminService = new AdminService(mockRepository.Object);
 
-            // Act
             var result = await adminService.UpdateUser(userId, userUpdateDto);
-
-            // Assert
             Assert.Equal(output, result);
         }
 
@@ -67,13 +58,9 @@ namespace Application.UnitTest.ControllerTest
             var mockRepository = new Mock<IAdminRepository>();
             mockRepository.Setup(repo => repo.UpdateUser(userId, userUpdateDTO))
                 .ReturnsAsync(output);
-
             var adminService = new AdminService(mockRepository.Object);
 
-            // Act
             var result = await adminService.UpdateUser(userId, userUpdateDTO);
-
-            // Assert
             Assert.Equal(output, result);
         }
     }
