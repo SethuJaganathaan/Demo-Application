@@ -74,10 +74,10 @@ namespace Application.Repository.Repositories
 
             if (user.ProfilePicture != null)
             {
-                string[] allowedExtensions = { ".png", ".jpg", ".jpeg" };
+                string[] pictureExtensions = { ".png", ".jpg", ".jpeg" };
                 var fileExtension = Path.GetExtension(user.ProfilePicture.FileName).ToLower();
 
-                if (!allowedExtensions.Contains(fileExtension))
+                if (!pictureExtensions.Contains(fileExtension))
                     return "Invalid picture format";
             }
 
