@@ -1,5 +1,4 @@
-﻿using Application.Repository.Context;
-using Application.Repository.DTO.Common;
+﻿using Application.Repository.DTO.Common;
 using Application.Repository.DTO.User;
 using Application.Repository.Entities;
 using Application.Repository.Interfaces;
@@ -124,7 +123,7 @@ namespace Application.Repository.Repositories
                     new Claim("RoleId", user.RoleId.ToString()),
                     new Claim("Email", user.Email),
                     new Claim("Username", user.Username),
-                    new Claim("RoleName", user.RoleName)
+                    new Claim(ClaimTypes.Role, user.RoleName)
                 }),
                 Expires = DateTime.Now.AddHours(10),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -140,7 +139,6 @@ namespace Application.Repository.Repositories
 
             if (user != null)
             {
-                user.Status = Status;
                 await _dbcontext.SaveChangesAsync();
                 return true; 
             }

@@ -12,9 +12,6 @@
 
         public string Email { get; set; }
 
-        public bool IsLoggedIn { get; set; }
-
         public bool Status { get; set; }    
-
     }
 }

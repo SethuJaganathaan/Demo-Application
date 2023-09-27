@@ -1,5 +1,5 @@
-﻿using Application.Repository.Context;
-using Application.Repository.DTO.Admin;
+﻿using Application.Repository.DTO.Admin;
+using Application.Repository.DTO.User;
 using Application.Repository.Entities;
 using Application.Repository.Interfaces;
 using AutoMapper;
@@ -20,15 +20,34 @@ namespace Application.Repository.Repositories
 
         public async Task<string> DeleteUser(Guid userId)
         {
-            var user = await GetUserById(userId);
-            _dbcontext.Users.Remove(user);
-            await _dbcontext.SaveChangesAsync();
-            return result;
+            var user = await _dbcontext.Users.FindAsync(userId);
+            if (user != null)
+            {
+                _dbcontext.Users.Remove(user);
+                await _dbcontext.SaveChangesAsync();
+                return result;
+            }
+            return "User not found";
         }
 
-        public async Task<User> GetUserById(Guid userId)
+        public async Task<UserDTO> GetUserById(Guid userId)
         {
-            return await _dbcontext.Users.FindAsync(userId);
+            var query = await (from user in _dbcontext.Users
+                        where user.UserId == userId
+                        join role in _dbcontext.Roles on user.RoleId equals role.RoleId
+                        join department in _dbcontext.Departments on user.DepartmentId equals department.DepartmentId
+                        select new UserDTO
+                        {
+                           UserId = user.UserId,
+                           RoleName = role.Rolename,
+                           DepartmentName = department.DepartmentName,
+                           Username = user.Username,
+                           Email = user.Email,
+                           ProfilePicture = user.ProfilePicture,
+                           Status = user.Status
+                        }).FirstOrDefaultAsync();
+
+            return query;
         }
 
         public async Task<string> UpdateUser(Guid userId, UserUpdateDTO user)

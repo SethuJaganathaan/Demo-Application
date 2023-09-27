@@ -5,8 +5,6 @@ namespace Application.Repository.Entities;
 
 public partial class User
 {
-    public int Id { get; set; }
-
     public Guid UserId { get; set; }
 
     public string Username { get; set; }
@@ -17,13 +15,11 @@ public partial class User
 
     public byte[] ProfilePicture { get; set; }
 
-    public bool? Status { get; set; }
+    public short Status { get; set; }
 
     public Guid? RoleId { get; set; }
 
     public Guid? DepartmentId { get; set; }
-
-    public bool? IsDeleted { get; set; }
 
     public virtual Department Department { get; set; }
 

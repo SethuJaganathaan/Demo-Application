@@ -1,11 +1,13 @@
 ﻿using Application.Repository.DTO.Admin;
 using Application.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize(Policy = "AdminPolicy")]
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _adminService;
