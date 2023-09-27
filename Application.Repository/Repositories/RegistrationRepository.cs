@@ -6,10 +6,6 @@ using AutoMapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace Application.Repository.Repositories
 {
@@ -50,19 +46,15 @@ namespace Application.Repository.Repositories
                     await UpdateUserLoggedInStatus(user.UserId, true);
                     await _dbcontext.SaveChangesAsync();
 
-                    var token = GenerateToken(user);
-
                     return new BaseResponse
                     {
                         Status = "LOGIN SUCCESSFUL",
-                        Token = token
                     };
                 }
             }
             return new BaseResponse
             {
                 Status = "Failure",
-                Token = null
             };
         }
 
@@ -108,29 +100,6 @@ namespace Application.Repository.Repositories
             };
 
             return userResponse;
-        }
-
-        public string GenerateToken(UserRequest user)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_setting.SecurityKey);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim("UserId", user.UserId.ToString()),
-                    new Claim("RoleId", user.RoleId.ToString()),
-                    new Claim("Email", user.Email),
-                    new Claim("Username", user.Username),
-                    new Claim(ClaimTypes.Role, user.RoleName)
-                }),
-                Expires = DateTime.Now.AddHours(10),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
         }
 
         public async Task<bool> UpdateUserLoggedInStatus(Guid userId,bool Status)
