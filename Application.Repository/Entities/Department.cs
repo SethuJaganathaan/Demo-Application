@@ -5,8 +5,6 @@ namespace Application.Repository.Entities;
 
 public partial class Department
 {
-    public int Id { get; set; }
-
     public Guid DepartmentId { get; set; }
 
     public string DepartmentName { get; set; }

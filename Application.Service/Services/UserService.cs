@@ -1,6 +1,7 @@
 ﻿using Application.Repository.DTO.User;
 using Application.Repository.Interfaces;
 using Application.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Application.Service.Services
 {
@@ -17,6 +18,7 @@ namespace Application.Service.Services
             return await _userRepository.GetAllUsers();
         }
 
+        [Authorize(Policy = "UserPolicy")]
         public async Task<bool> SoftDeleteUser(Guid userId)
         {
             return await _userRepository.SoftDeleteUser(userId);

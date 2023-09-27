@@ -1,10 +1,12 @@
 ﻿using Application.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -13,6 +15,7 @@ namespace Application.API.Controllers
             _userService = userService;
         }
 
+        [Authorize(Policy = "UserOrAdminPolicy")]
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -20,6 +23,7 @@ namespace Application.API.Controllers
             return Ok(users);
         }
 
+        [Authorize(Policy = "UserOrAdminPolicy")]
         [HttpDelete]
         public async Task<IActionResult> SoftDeleteUser(Guid userId)
         {

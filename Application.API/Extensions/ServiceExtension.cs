@@ -1,15 +1,16 @@
-﻿using Application.Repository.Context;
-using Application.Repository.Core;
+﻿using Application.Repository.Core;
+using Application.Repository.DTO.Common;
+using Application.Repository.Entities;
 using Application.Repository.Interfaces;
 using Application.Repository.Repositories;
 using Application.Service.Interfaces;
-using Application.Service.Models;
 using Application.Service.Services;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Serilog;
+using System.Text;
 
 namespace Application.API.Extensions
 {
@@ -35,6 +36,10 @@ namespace Application.API.Extensions
 
         public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
+            var _jwtsetting = configuration.GetSection("JWTSetting");
+            services.Configure<JWTSetting>(_jwtsetting);
+            var authkey = configuration.GetValue<string>("JWTSetting:SecurityKey");
+
             services.AddDbContext<ApplicationContext>(option => option
                .UseSqlServer(configuration.GetConnectionString("DataBaseConnectionString")));
 
@@ -49,6 +54,24 @@ namespace Application.API.Extensions
             {
                 x.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
             });
+
+            services.AddAuthentication(item =>
+            {
+                item.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                item.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(item =>
+            {
+                item.RequireHttpsMetadata = true;
+                item.SaveToken = true;
+                item.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authkey)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                };
+            });
+
 
             services.AddSwaggerGen(c => c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
@@ -78,30 +101,6 @@ namespace Application.API.Extensions
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
-        }
-
-        public static void ConfigureExceptionHandler(this IApplicationBuilder app)
-        {
-            app.UseExceptionHandler(error =>
-            {
-                error.Run(async context =>
-                {
-                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                    context.Response.ContentType = "application/json";
-
-                    var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
-                    if (contextFeature != null)
-                    {
-                        Log.Error($"Something went wrong {contextFeature.Error}");
-
-                        await context.Response.WriteAsync(new Error
-                        {
-                            StatusCode = context.Response.StatusCode,
-                            Message = "Internal server error"
-                        }.ToString());
-                    }
-                });
-            });
         }
     }
 }
