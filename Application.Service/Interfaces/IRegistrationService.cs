@@ -10,5 +10,7 @@ namespace Application.Service.Interfaces
         Task<BaseResponse> Login(LoginDTO login);
 
         Task<UserRequest> GetUser(string email);
+
+        string GenerateToken(UserRequest user);
     }
 }
