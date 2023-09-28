@@ -1,6 +1,7 @@
 ﻿using Application.Repository.DTO.Common;
 using Application.Repository.DTO.User;
 using Application.Repository.Entities;
+using Application.Repository.Enums;
 using Application.Repository.Interfaces;
 using AutoMapper;
 using Microsoft.Data.SqlClient;
@@ -13,14 +14,11 @@ namespace Application.Repository.Repositories
     {
         private readonly ApplicationContext _dbcontext;
         private readonly IMapper _mapper;
-        private readonly JWTSetting _setting;
-
         string result = "Action Successful";
         public RegistrationRepository(ApplicationContext dbcontext, IMapper mapper, IOptions<JWTSetting> options)
         {
             _dbcontext = dbcontext;
             _mapper = mapper;
-            _setting = options.Value;
         }
 
         public async Task<BaseResponse> Login(LoginDTO login)
@@ -43,7 +41,7 @@ namespace Application.Repository.Repositories
                 var user = await GetUser(login.email);
                 if (user != null)
                 {
-                    await UpdateUserLoggedInStatus(user.UserId, true);
+                    await UpdateUserStatus(user.UserId, UserStatus.Active);
                     await _dbcontext.SaveChangesAsync();
 
                     return new BaseResponse
@@ -102,16 +100,16 @@ namespace Application.Repository.Repositories
             return userResponse;
         }
 
-        public async Task<bool> UpdateUserLoggedInStatus(Guid userId,bool Status)
+        public async Task<bool> UpdateUserStatus(Guid userId, UserStatus status)
         {
             var user = await _dbcontext.Users.FirstOrDefaultAsync(u => u.UserId == userId);
-
             if (user != null)
             {
+                user.Status = (short)(status == UserStatus.Active ? UserStatus.Active : UserStatus.Inactive);
                 await _dbcontext.SaveChangesAsync();
-                return true; 
+                return true;
             }
-            return false; 
+            return false;
         }
 
     }

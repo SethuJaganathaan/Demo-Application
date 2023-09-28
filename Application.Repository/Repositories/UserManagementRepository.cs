@@ -15,6 +15,10 @@ namespace Application.Repository.Repositories
 
         public async Task<object> UserManagementByRoleid(Guid Roleid)
         {
+            if (Roleid == Guid.Empty)
+            {
+                return new { Message = "Invalid Roleid" };
+            }
             var superAdminRole = await _dbcontext.Roles
                 .FirstOrDefaultAsync(r => r.Rolename == "SuperAdmin");
 

@@ -1,4 +1,5 @@
 ﻿using Application.Service.Interfaces;
+using Application.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,7 +25,7 @@ namespace Application.API.Controllers
         }
 
         [Authorize(Policy = "UserOrAdminPolicy")]
-        [HttpDelete]
+        [HttpDelete("softdelete")]
         public async Task<IActionResult> SoftDeleteUser(Guid userId)
         {
             var success = await _userService.SoftDeleteUser(userId);

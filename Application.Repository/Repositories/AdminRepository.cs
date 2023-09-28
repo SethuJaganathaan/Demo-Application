@@ -1,4 +1,5 @@
 ﻿using Application.Repository.DTO.Admin;
+using Application.Repository.DTO.Common;
 using Application.Repository.DTO.User;
 using Application.Repository.Entities;
 using Application.Repository.Interfaces;
@@ -12,6 +13,7 @@ namespace Application.Repository.Repositories
         private readonly ApplicationContext _dbcontext;
         private readonly IMapper _mapper;
         string result = "Action Successful";
+        string notfound = "Invalid ID";
         public AdminRepository(ApplicationContext dbcontext, IMapper mapper)
         {
             _dbcontext = dbcontext;
@@ -20,6 +22,9 @@ namespace Application.Repository.Repositories
 
         public async Task<string> DeleteUser(Guid userId)
         {
+            if (userId == Guid.Empty)
+                return notfound;
+
             var user = await _dbcontext.Users.FindAsync(userId);
             if (user != null)
             {
@@ -32,6 +37,12 @@ namespace Application.Repository.Repositories
 
         public async Task<UserDTO> GetUserById(Guid userId)
         {
+            if (userId == Guid.Empty)
+                return new UserDTO
+                {
+                    message = notfound
+                };
+
             var query = await (from user in _dbcontext.Users
                         where user.UserId == userId
                         join role in _dbcontext.Roles on user.RoleId equals role.RoleId
@@ -52,6 +63,9 @@ namespace Application.Repository.Repositories
 
         public async Task<string> UpdateUser(Guid userId, UserUpdateDTO user)
         {
+            if (userId == Guid.Empty)
+                return notfound;
+
             var existingUser = await _dbcontext.Users.FirstOrDefaultAsync(x => x.UserId == userId);
             if (existingUser == null)
             {

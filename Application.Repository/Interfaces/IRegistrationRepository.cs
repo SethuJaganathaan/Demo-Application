@@ -1,5 +1,6 @@
 ﻿using Application.Repository.DTO.Common;
 using Application.Repository.DTO.User;
+using Application.Repository.Enums;
 
 namespace Application.Repository.Interfaces
 {
@@ -11,7 +12,6 @@ namespace Application.Repository.Interfaces
 
         Task<UserRequest> GetUser(string email);
 
-        Task<bool> UpdateUserLoggedInStatus(Guid userId,bool Status);
-
+        Task<bool> UpdateUserStatus(Guid userId, UserStatus status);
     }
 }

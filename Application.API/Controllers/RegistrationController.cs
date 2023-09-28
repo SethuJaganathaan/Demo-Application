@@ -36,5 +36,6 @@ namespace Application.API.Controllers
             var user = await _registrationService.GetUser(email);
             return Ok(user);
         }
+
     }
 }
