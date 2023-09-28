@@ -1,5 +1,4 @@
 ﻿using Application.Service.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.API.Controllers

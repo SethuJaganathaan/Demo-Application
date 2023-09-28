@@ -1,5 +1,4 @@
 ﻿using Application.Repository.DTO.User;
-using Application.Repository.Enums;
 
 namespace Application.Service.Interfaces
 {

@@ -27,7 +27,6 @@
             catch (Exception ex)
             {
                 _logger.LogError($"An unhandled exception occurred: {ex}");
-
                 await HandleExceptionAsync(context, ex);
             }
         }

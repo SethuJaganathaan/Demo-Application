@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Application.Repository.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace Application.Repository.Entities;
+namespace Application.Repository.Context;
 
 public partial class ApplicationContext : DbContext
 {

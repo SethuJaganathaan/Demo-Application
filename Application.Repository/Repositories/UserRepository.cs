@@ -1,6 +1,5 @@
-﻿using Application.Repository.DTO.Common;
+﻿using Application.Repository.Context;
 using Application.Repository.DTO.User;
-using Application.Repository.Entities;
 using Application.Repository.Enums;
 using Application.Repository.Interfaces;
 using AutoMapper;
@@ -70,6 +69,5 @@ namespace Application.Repository.Repositories
              var userDTO = _mapper.Map<UserDTO>(query);
              return userDTO;
         }
-
     }
 }
