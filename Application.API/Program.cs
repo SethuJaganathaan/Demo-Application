@@ -1,5 +1,7 @@
 using Application.API.Extensions;
 using Application.Repository.DTO.Common;
+using Application.Service.Models;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,11 +17,13 @@ builder.Services.ConfigureServices(configuration);
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
-    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("SuperAdmin"));
-    options.AddPolicy("UserOrAdminPolicy", policy => policy.RequireRole("User", "SuperAdmin"));
+    options.AddPolicy(CommonConstant.Policies.UserPolicy, policy => policy.RequireClaim(ClaimTypes.Role, CommonConstant.Role.User));
+    options.AddPolicy(CommonConstant.Policies.AdminPolicy, policy => policy.RequireClaim(ClaimTypes.Role, CommonConstant.Role.SuperAdmin));
+    options.AddPolicy(CommonConstant.Policies.UserOrAdminPolicy, policy =>
+    {
+        policy.RequireRole(CommonConstant.Role.SuperAdmin, CommonConstant.Role.User);
+    });
 });
-
 
 var app = builder.Build();
 

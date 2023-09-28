@@ -1,4 +1,5 @@
 ﻿using Application.Service.Interfaces;
+using Application.Service.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +16,7 @@ namespace Application.API.Controllers
             _userService = userService;
         }
 
-        [Authorize(Policy = "UserOrAdminPolicy")]
+        [Authorize(Policy = CommonConstant.Policies.UserOrAdminPolicy)]
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -23,7 +24,7 @@ namespace Application.API.Controllers
             return Ok(users);
         }
 
-        [Authorize(Policy = "UserOrAdminPolicy")]
+        [Authorize(Policy = CommonConstant.Policies.UserOrAdminPolicy)]
         [HttpDelete("softdelete")]
         public async Task<IActionResult> SoftDeleteUser(Guid userId)
         {
