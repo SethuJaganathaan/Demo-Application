@@ -1,6 +1,5 @@
 ﻿using Application.Repository.DTO.Common;
 using Application.Service.Interfaces;
-using Application.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.API.Controllers

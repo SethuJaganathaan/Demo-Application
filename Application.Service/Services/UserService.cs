@@ -1,9 +1,6 @@
 ﻿using Application.Repository.DTO.User;
-using Application.Repository.Enums;
 using Application.Repository.Interfaces;
-using Application.Repository.Repositories;
 using Application.Service.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 
 namespace Application.Service.Services
 {

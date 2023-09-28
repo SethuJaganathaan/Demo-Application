@@ -1,7 +1,6 @@
-﻿using Application.Repository.DTO.Admin;
-using Application.Repository.DTO.Common;
+﻿using Application.Repository.Context;
+using Application.Repository.DTO.Admin;
 using Application.Repository.DTO.User;
-using Application.Repository.Entities;
 using Application.Repository.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;

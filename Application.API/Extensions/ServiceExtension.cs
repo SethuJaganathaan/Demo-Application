@@ -1,6 +1,6 @@
-﻿using Application.Repository.Core;
+﻿using Application.Repository.Context;
+using Application.Repository.Core;
 using Application.Repository.DTO.Common;
-using Application.Repository.Entities;
 using Application.Repository.Interfaces;
 using Application.Repository.Repositories;
 using Application.Service.Interfaces;
@@ -19,8 +19,6 @@ namespace Application.API.Extensions
     {
         public static void ConfigureScope(this IServiceCollection services, IConfiguration configuration)
         {
-            //services.AddSingleton(configuration);
-
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
 

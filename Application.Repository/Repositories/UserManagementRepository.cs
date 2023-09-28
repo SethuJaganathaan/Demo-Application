@@ -1,5 +1,5 @@
-﻿using Application.Repository.DTO.Common;
-using Application.Repository.Entities;
+﻿using Application.Repository.Context;
+using Application.Repository.DTO.Common;
 using Application.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 

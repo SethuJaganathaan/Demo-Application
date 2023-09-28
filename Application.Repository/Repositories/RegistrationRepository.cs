@@ -1,4 +1,5 @@
-﻿using Application.Repository.DTO.Common;
+﻿using Application.Repository.Context;
+using Application.Repository.DTO.Common;
 using Application.Repository.DTO.User;
 using Application.Repository.Entities;
 using Application.Repository.Enums;
@@ -23,6 +24,13 @@ namespace Application.Repository.Repositories
 
         public async Task<BaseResponse> Login(LoginDTO login)
         {
+            if (string.IsNullOrEmpty(login.email) || string.IsNullOrEmpty(login.password))
+            {
+                return new BaseResponse
+                {
+                    Status = "Invalid email or password",
+                };
+            }
             var email = new SqlParameter("@email", login.email);
             var password = new SqlParameter("@Password", login.password);
             var sql = "EXEC UserLogin @email, @Password";
