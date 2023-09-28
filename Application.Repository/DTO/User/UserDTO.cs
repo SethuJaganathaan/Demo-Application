@@ -18,5 +18,7 @@ namespace Application.Repository.DTO.User
         public byte[] ProfilePicture { get; set; }
 
         public short Status { get; set; }
+
+        public string message { get; set; }
     }
 }

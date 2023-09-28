@@ -1,4 +1,5 @@
 ﻿using Application.Repository.DTO.User;
+using Application.Repository.Enums;
 
 namespace Application.Service.Interfaces
 {
@@ -7,5 +8,6 @@ namespace Application.Service.Interfaces
         Task<List<UserDTO>> GetAllUsers();
 
         Task<bool> SoftDeleteUser(Guid userId);
+
     }
 }
