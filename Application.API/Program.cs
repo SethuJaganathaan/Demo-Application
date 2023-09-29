@@ -18,10 +18,10 @@ builder.Services.ConfigureServices(configuration);
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy(CommonConstant.Policies.UserPolicy, policy => policy.RequireClaim(ClaimTypes.Role, CommonConstant.Role.User));
-    options.AddPolicy(CommonConstant.Policies.AdminPolicy, policy => policy.RequireClaim(ClaimTypes.Role, CommonConstant.Role.SuperAdmin));
-    options.AddPolicy(CommonConstant.Policies.UserOrAdminPolicy, policy =>
+    options.AddPolicy(CommonConstant.Policies.AdminPolicy, policy => policy.RequireClaim(ClaimTypes.Role, CommonConstant.Role.Admin));
+    options.AddPolicy(CommonConstant.Policies.UserAndAdminPolicy, policy =>
     {
-        policy.RequireRole(CommonConstant.Role.SuperAdmin, CommonConstant.Role.User);
+        policy.RequireRole(CommonConstant.Role.Admin, CommonConstant.Role.User);
     });
 });
 
