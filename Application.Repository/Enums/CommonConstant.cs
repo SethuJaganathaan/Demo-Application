@@ -1,4 +1,4 @@
-﻿namespace Application.Service.Models
+﻿namespace Application.Repository.Enums
 {
     public static class CommonConstant
     {

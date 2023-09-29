@@ -1,7 +1,7 @@
 ﻿using Application.Repository.Context;
 using Application.Repository.DTO.Common;
+using Application.Repository.Enums;
 using Application.Repository.Interfaces;
-using Application.Service.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
