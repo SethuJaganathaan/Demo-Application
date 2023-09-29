@@ -23,7 +23,7 @@ namespace Application.Repository.Repositories
             }
 
             var superAdminRole = await _dbcontext.Roles
-                .FirstOrDefaultAsync(r => r.Rolename == CommonConstant.Role.SuperAdmin);
+                .FirstOrDefaultAsync(r => r.Rolename == CommonConstant.Role.Admin);
 
             if (superAdminRole == null)
             {

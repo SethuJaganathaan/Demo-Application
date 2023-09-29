@@ -2,9 +2,12 @@
 {
     using System;
     using System.Net;
+    using System.Text.Json;
     using System.Threading.Tasks;
+    using Application.Repository.DTO.Exception;
     using Application.Service.Models;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
 
     public class ExceptionMiddleware
@@ -24,26 +27,40 @@
             {
                 await _next(context);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                _logger.LogError($"An unhandled exception occurred: {ex}");
-                await HandleExceptionAsync(context, ex);
+                _logger.LogError($"An unhandled exception occurred: {exception}");
+                await ExceptionHandle(context, exception);
             }
         }
 
-        private Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private Task ExceptionHandle(HttpContext context, Exception exception)
         {
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-            var errorResponse = new Error
+            if (exception is ApplicationException)
             {
-                StatusCode = context.Response.StatusCode,
-                Message = "An error occurred while processing your request.",
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
+            else if (exception is NotFound)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+            }
+            else
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            }
+
+            ErrorMessage errorMessage = new ErrorMessage
+            {
+                Status = context.Response.StatusCode,
+                Types = context.Response.ContentType,
+                Title = exception.Message,
+                Detail = exception.StackTrace,
             };
 
-            return context.Response.WriteAsync(errorResponse.ToString());
+            var result = JsonSerializer.Serialize(errorMessage);
+            return context.Response.WriteAsync(result);
         }
     }
-
 }

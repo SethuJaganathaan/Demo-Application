@@ -16,7 +16,7 @@ namespace Application.API.Controllers
             _userService = userService;
         }
 
-        [Authorize(Policy = CommonConstant.Policies.UserOrAdminPolicy)]
+        [Authorize(Policy = CommonConstant.Policies.UserAndAdminPolicy)]
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -24,7 +24,7 @@ namespace Application.API.Controllers
             return Ok(users);
         }
 
-        [Authorize(Policy = CommonConstant.Policies.UserOrAdminPolicy)]
+        [Authorize(Policy = CommonConstant.Policies.UserAndAdminPolicy)]
         [HttpDelete("softdelete")]
         public async Task<IActionResult> SoftDeleteUser(Guid userId)
         {

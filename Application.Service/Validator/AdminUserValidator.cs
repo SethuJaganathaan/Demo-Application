@@ -10,7 +10,7 @@ namespace Application.Service.Validator
             RuleFor(x => x.Username)
                 .NotEmpty().WithMessage("Username is required")
                 .MinimumLength(5).WithMessage("Username minimum length of 5 Character")
-                .MaximumLength(20).WithMessage("Username must not exceed 20 characters");
+                .MaximumLength(255).WithMessage("Username must not exceed 20 characters");
 
             RuleFor(x => x.Email).EmailAddress()
                 .NotEmpty().WithMessage("Email is required")
