@@ -1,5 +1,5 @@
-﻿using Application.Service.Interfaces;
-using Application.Service.Models;
+﻿using Application.Repository.Enums;
+using Application.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

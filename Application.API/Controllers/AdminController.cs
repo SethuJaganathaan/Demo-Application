@@ -1,6 +1,6 @@
 ﻿using Application.Repository.DTO.Admin;
+using Application.Repository.Enums;
 using Application.Service.Interfaces;
-using Application.Service.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

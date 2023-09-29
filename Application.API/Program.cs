@@ -1,6 +1,6 @@
 using Application.API.Extensions;
 using Application.Repository.DTO.Common;
-using Application.Service.Models;
+using Application.Repository.Enums;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
