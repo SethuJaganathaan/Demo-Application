@@ -7,7 +7,6 @@
     using Application.Repository.DTO.Exception;
     using Application.Service.Models;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
 
     public class ExceptionMiddleware
