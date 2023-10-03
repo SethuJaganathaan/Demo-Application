@@ -34,6 +34,8 @@ namespace Application.API.Extensions
 
         public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddCors();
+
             var _jwtsetting = configuration.GetSection("JWTSetting");
             services.Configure<JWTSetting>(_jwtsetting);
             var authkey = configuration.GetValue<string>("JWTSetting:SecurityKey");
