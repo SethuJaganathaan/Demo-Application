@@ -22,7 +22,7 @@ namespace Application.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromForm]LoginDTO login)
+        public async Task<IActionResult> Login(LoginDTO login)
         {
             var signIn = await _registrationService.Login(login); 
             return Ok(signIn); 
