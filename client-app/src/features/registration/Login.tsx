@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Card, CardContent } from "semantic-ui-react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import agent from "../../api/agent";
+import agent from "../../app/api/agent";
 
 interface FormValues {
     email: string;
