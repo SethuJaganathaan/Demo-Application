@@ -61,7 +61,7 @@ namespace Application.Service.Services
                 new Claim("Username", user.Username),
                 new Claim(ClaimTypes.Role, user.RoleName)
                 }),
-                Expires = DateTime.Now.AddHours(10),
+                Expires = DateTime.Now.AddMinutes(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
