@@ -37,19 +37,6 @@
         {
             context.Response.ContentType = "application/json";
 
-            if (exception is ApplicationException)
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            }
-            else if (exception is NotFound)
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
-            }
-            else
-            {
-                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            }
-
             ErrorMessage errorMessage = new ErrorMessage
             {
                 Status = context.Response.StatusCode,
