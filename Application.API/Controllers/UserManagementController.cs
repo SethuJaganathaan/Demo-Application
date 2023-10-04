@@ -14,9 +14,14 @@ namespace Application.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> UserManagementByRoleid(Guid Roleid)
+        public async Task<IActionResult> UserManagementByRoleid(Guid? Roleid)
         {
-            var roles = await _userManagementService.UserManagementByRoleid(Roleid);
+            if (Roleid == null)
+            {
+                return NotFound();
+            }
+
+            var roles = await _userManagementService.UserManagementByRoleid(Roleid.Value);
             return Ok(roles);
         }
     }
