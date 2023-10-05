@@ -6,7 +6,7 @@ namespace Application.Service.Interfaces
     {
         Task<List<UserDTO>> GetAllUsers();
 
-        Task<bool> SoftDeleteUser(Guid userId);
+        Task<bool?> SoftDeleteUser(Guid userId);
 
     }
 }

@@ -17,7 +17,7 @@ namespace Application.Service.Services
             return await _userRepository.GetAllUsers();
         }
 
-        public async Task<bool> SoftDeleteUser(Guid userId)
+        public async Task<bool?> SoftDeleteUser(Guid userId)
         {
             return await _userRepository.SoftDeleteUser(userId);
         }
