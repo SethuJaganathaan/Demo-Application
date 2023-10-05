@@ -9,6 +9,6 @@ namespace Application.Repository.Interfaces
 
         Task<UserDTO> GetUserById(Guid userId);
 
-        Task<bool> SoftDeleteUser(Guid userId);
+        Task<bool?> SoftDeleteUser(Guid userId);
     }
 }

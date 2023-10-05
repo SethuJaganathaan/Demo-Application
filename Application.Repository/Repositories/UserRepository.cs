@@ -37,7 +37,7 @@ namespace Application.Repository.Repositories
             return userDTO;
         }
 
-        public async Task<bool> SoftDeleteUser(Guid userId)
+        public async Task<bool?> SoftDeleteUser(Guid userId)
         {
             var user = await _dbcontext.Users.FirstOrDefaultAsync(u => u.UserId == userId);
             if (user != null)

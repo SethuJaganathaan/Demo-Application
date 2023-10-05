@@ -1,6 +1,11 @@
-﻿using Application.Repository.DTO.Admin;
+﻿using Application.API.Controllers;
+using Application.Repository.DTO.Admin;
+using Application.Repository.DTO.User;
+using Application.Repository.Entities;
 using Application.Repository.Interfaces;
+using Application.Service.Interfaces;
 using Application.Service.Services;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 
 namespace Application.UnitTest.ControllerTest
@@ -54,7 +59,7 @@ namespace Application.UnitTest.ControllerTest
         public async Task UpdateUser_ReturnNull()
         {
             var userId = Guid.NewGuid();
-            UserUpdateDTO userUpdateDTO = null;
+            UserUpdateDTO? userUpdateDTO = null;
             string output = null;
 
             var existingUserId = Guid.Parse("093EC28D-3900-4556-BAAE-36D4D251DAEA"); 
@@ -67,5 +72,61 @@ namespace Application.UnitTest.ControllerTest
             var result = await adminService.UpdateUser(existingUserId, userUpdateDTO);
             Assert.Equal(output, result);
         }
+
+        [Fact]
+        public async Task GetUserById_ReturnOkResult()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var mockService = new Mock<IAdminService>();
+            mockService.Setup(set => set.GetUserById(userId))
+                .ReturnsAsync(new UserDTO
+                {
+                    UserId = userId,
+                    RoleName = "User",
+                    DepartmentName = "Product",
+                    Username = "Zoro",
+                    Email = "zoro@gmail.com",
+                    ProfilePicture = new byte[] { 1, 5, 7, 6 },
+                    Status = 1
+                });
+            var controller = new AdminController(mockService.Object);
+
+            // Act
+            var result = await controller.GetUserById(userId) as OkObjectResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(200, result.StatusCode);
+            var response = result.Value as UserDTO;
+            Assert.NotNull(response);
+            Assert.Equal(userId, response.UserId);
+            Assert.Equal("User", response.RoleName);
+            Assert.Equal("Product", response.DepartmentName);
+            Assert.Equal("Zoro", response.Username);
+            Assert.Equal("zoro@gmail.com", response.Email);
+            Assert.Equal(new byte[] { 1, 5, 7, 6 }, response.ProfilePicture);
+            Assert.Equal(1, response.Status);
+        }
+
+        [Fact]
+        public async Task GetUserById_ReturnBadRequest()
+        {
+            var userId = Guid.NewGuid();
+            var mockService = new Mock<IAdminService>();
+            mockService.Setup(set => set.GetUserById(userId))
+                .ReturnsAsync((UserDTO?)null); 
+            var controller = new AdminController(mockService.Object);
+
+            // Act
+            var result = await controller.GetUserById(userId) as BadRequestResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<BadRequestResult>(result);
+            Assert.Equal(400, result.StatusCode);
+        }
+
     }
 }

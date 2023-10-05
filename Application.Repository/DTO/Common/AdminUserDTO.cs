@@ -18,6 +18,6 @@ namespace Application.Repository.DTO.Common
 
         public byte[] ProfilePicture { get; set; }
 
-        public bool Status { get; set; }
+        public short Status { get; set; }
     }
 }

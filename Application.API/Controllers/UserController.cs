@@ -21,7 +21,10 @@ namespace Application.API.Controllers
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userService.GetAllUsers();
-            return Ok(users);
+            if(users != null)
+                return Ok(users);
+            else
+                return NotFound();
         }
 
         [Authorize(Policy = CommonConstant.Policies.UserAndAdminPolicy)]
@@ -29,7 +32,13 @@ namespace Application.API.Controllers
         public async Task<IActionResult> SoftDeleteUser(Guid userId)
         {
             var success = await _userService.SoftDeleteUser(userId);
-            return Ok(success);
+
+            if (success == true)
+                return Ok(true);
+            else if (success == false)
+                return Ok(false);
+            else
+                return NotFound();
         }
     }
 }

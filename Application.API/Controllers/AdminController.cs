@@ -21,7 +21,10 @@ namespace Application.API.Controllers
         public async Task<IActionResult> GetUserById(Guid userId)
         {
             var user = await _adminService.GetUserById(userId);
-            return Ok(user);
+            if(user != null)
+                return Ok(user);
+            else
+                return BadRequest();
         }
 
         [HttpPut("User")]
