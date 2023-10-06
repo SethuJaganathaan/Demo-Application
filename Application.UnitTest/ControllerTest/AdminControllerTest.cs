@@ -1,7 +1,6 @@
 ﻿using Application.API.Controllers;
 using Application.Repository.DTO.Admin;
 using Application.Repository.DTO.User;
-using Application.Repository.Entities;
 using Application.Repository.Interfaces;
 using Application.Service.Interfaces;
 using Application.Service.Services;

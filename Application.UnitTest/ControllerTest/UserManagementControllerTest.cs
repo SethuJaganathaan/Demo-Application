@@ -89,7 +89,7 @@ namespace Application.UnitTest.ControllerTest
         }
 
         [Fact]
-        public async Task UserManagementRoleId_InvalidGuid_ReturnOkResult()
+        public async Task UserManagementRoleId_InvalidGuid()
         {
             // Arrange
             var invalidGuid = Guid.NewGuid();
