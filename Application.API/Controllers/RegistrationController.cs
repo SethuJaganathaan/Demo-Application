@@ -25,7 +25,7 @@ namespace Application.API.Controllers
         public async Task<IActionResult> Login(LoginDTO login)
         {
             var signIn = await _registrationService.Login(login); 
-            return Ok(signIn); 
+            return Ok(signIn);
         }
 
 
@@ -33,8 +33,10 @@ namespace Application.API.Controllers
         public async Task<IActionResult> GetUser(string email)
         {
             var user = await _registrationService.GetUser(email);
-            return Ok(user);
+            if (user != null)
+                return Ok(user);
+            else
+                return NotFound();
         }
-
     }
 }

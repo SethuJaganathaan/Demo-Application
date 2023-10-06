@@ -2,6 +2,7 @@
 using Application.Repository.DTO.User;
 using Application.Repository.Interfaces;
 using Application.Service.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

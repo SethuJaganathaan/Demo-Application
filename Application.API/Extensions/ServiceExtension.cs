@@ -70,7 +70,6 @@ namespace Application.API.Extensions
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero
                 };
             });
 
