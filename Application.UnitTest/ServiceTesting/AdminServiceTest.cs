@@ -59,7 +59,7 @@ namespace Application.UnitTest.ServiceTest
         }
 
         [Fact]
-        public async Task UpdateUser_ValidUserId_ReturnsOk()
+        public async Task UpdateUser_ValidUserId_ReturnsActionSuccessful()
         {
             // Arrange
             var userId = Guid.NewGuid();
@@ -70,10 +70,9 @@ namespace Application.UnitTest.ServiceTest
                 Email = "dump@gmail.com",
                 ProfilePicture = profilePicture,
                 Password = "Dump@123",
-                RoleId = Guid.Parse("7F89D12F-2383-42FF-9B26-63132C92A7A8"),
-                DepartmentId = Guid.Parse("7F89D12F-2383-42FF-9B26-63132C92A7A8")
-                
+                RoleId = Guid.Parse("113D2E85-E0E6-44B6-85C9-D6059D6B97B6")
             };
+
             var adminRepositoryMock = new Mock<IAdminRepository>();
             adminRepositoryMock.Setup(repo => repo.UpdateUser(userId, userUpdateDTO))
                 .ReturnsAsync("Action Successful");

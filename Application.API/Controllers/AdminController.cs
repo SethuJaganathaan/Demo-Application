@@ -21,10 +21,10 @@ namespace Application.API.Controllers
         public async Task<IActionResult> GetUserById(Guid userId)
         {
             var user = await _adminService.GetUserById(userId);
-            if(user != null)
+            if (user != null)
                 return Ok(user);
             else
-                return BadRequest();
+                return NotFound();
         }
 
         [HttpPut("User")]
@@ -38,7 +38,10 @@ namespace Application.API.Controllers
         public async Task<IActionResult> DeleteUser(Guid userId)
         {
             var result = await _adminService.DeleteUser(userId);
-            return Ok(result);
+            if (result == "Action Successful")
+                return Ok(result);
+            else 
+                return NotFound();
         }
     }
 }
