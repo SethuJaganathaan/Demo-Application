@@ -73,59 +73,93 @@ namespace Application.UnitTest.ControllerTest
         }
 
         [Fact]
-        public async Task GetUserById_ReturnOkResult()
+        public async Task GetUserById_ValidUserId_ReturnsSuccess()
         {
             // Arrange
             var userId = Guid.NewGuid();
-            var mockService = new Mock<IAdminService>();
-            mockService.Setup(set => set.GetUserById(userId))
-                .ReturnsAsync(new UserDTO
-                {
-                    UserId = userId,
-                    RoleName = "User",
-                    DepartmentName = "Product",
-                    Username = "Zoro",
-                    Email = "zoro@gmail.com",
-                    ProfilePicture = new byte[] { 1, 5, 7, 6 },
-                    Status = 1
-                });
-            var controller = new AdminController(mockService.Object);
+            var user = new UserDTO
+            {
+                UserId = userId,
+                Username = "Dummy",
+                Email = "dummy@gmail.com",
+                ProfilePicture = new byte[] { 1, 2, 8, 9 },
+                RoleName = "User",
+                DepartmentName = "Service",
+                Status = 2
+            };
+
+            var adminServiceMock = new Mock<IAdminService>();
+            adminServiceMock.Setup(service => service.GetUserById(userId)).ReturnsAsync(user);
+
+            var controller = new AdminController(adminServiceMock.Object);
 
             // Act
-            var result = await controller.GetUserById(userId) as OkObjectResult;
+            var result = await controller.GetUserById(userId);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(200, result.StatusCode);
-            var response = result.Value as UserDTO;
-            Assert.NotNull(response);
-            Assert.Equal(userId, response.UserId);
-            Assert.Equal("User", response.RoleName);
-            Assert.Equal("Product", response.DepartmentName);
-            Assert.Equal("Zoro", response.Username);
-            Assert.Equal("zoro@gmail.com", response.Email);
-            Assert.Equal(new byte[] { 1, 5, 7, 6 }, response.ProfilePicture);
-            Assert.Equal(1, response.Status);
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var returnedUser = Assert.IsType<UserDTO>(okResult.Value);
+            Assert.Equal(user, returnedUser);
         }
 
         [Fact]
-        public async Task GetUserById_ReturnBadRequest()
+        public async Task GetUserById_ValidEmptyUserId_ReturnsNotFound()
         {
+            // Arrange
+            var userId = Guid.Empty;
+
+            var adminServiceMock = new Mock<IAdminService>();
+            adminServiceMock.Setup(service => service.GetUserById(userId)).ReturnsAsync((UserDTO)null);
+
+            var controller = new AdminController(adminServiceMock.Object);
+
+            // Act
+            var result = await controller.GetUserById(userId);
+
+            // Assert
+            Assert.IsType<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public async Task DeleteUser_ReturnsSuccess()
+        {
+            // Arrange
             var userId = Guid.NewGuid();
+            var output = "Action Successful";
+
             var mockService = new Mock<IAdminService>();
-            mockService.Setup(set => set.GetUserById(userId))
-                .ReturnsAsync((UserDTO?)null); 
+            mockService.Setup(service => service.DeleteUser(userId)).ReturnsAsync(output);
+
             var controller = new AdminController(mockService.Object);
 
             // Act
-            var result = await controller.GetUserById(userId) as BadRequestResult;
+            var result = await controller.DeleteUser(userId);
 
             // Assert
-            Assert.NotNull(result);
-            Assert.IsType<BadRequestResult>(result);
-            Assert.Equal(400, result.StatusCode);
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(output, okResult.Value);
+            Assert.Equal(200, okResult.StatusCode);
         }
 
+        [Fact]
+        public async Task DeleteUser_ReturnsNotFound()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var output = "User not found";
+
+            var mockService = new Mock<IAdminService>();
+            mockService.Setup(service => service.DeleteUser(userId)).ReturnsAsync(output);
+
+            var controller = new AdminController(mockService.Object);
+
+            // Act
+            var result = await controller.DeleteUser(userId) ;
+
+            // Assert
+            var okResult = Assert.IsType<NotFoundResult>(result);
+            Assert.IsType<NotFoundResult>(result);
+            Assert.Equal(404, okResult.StatusCode);
+        }
     }
 }
