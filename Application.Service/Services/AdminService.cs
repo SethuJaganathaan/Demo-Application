@@ -1,5 +1,5 @@
 ﻿using Application.Repository.DTO.Admin;
-using Application.Repository.Entities;
+using Application.Repository.DTO.User;
 using Application.Repository.Interfaces;
 using Application.Service.Interfaces;
 
@@ -17,12 +17,11 @@ namespace Application.Service.Services
         {
             return await _adminRepository.DeleteUser(userId);
         }
-
-        public async Task<User> GetUserById(Guid userId)
+        
+        public async Task<UserDTO> GetUserById(Guid userId)
         {
             return await _adminRepository.GetUserById(userId);
         }
-
         public async Task<string> UpdateUser(Guid userId, UserUpdateDTO user)
         {
             return await _adminRepository.UpdateUser(userId, user);

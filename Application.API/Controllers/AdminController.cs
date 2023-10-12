@@ -1,11 +1,14 @@
 ﻿using Application.Repository.DTO.Admin;
+using Application.Repository.Enums;
 using Application.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize(Policy = CommonConstant.Policies.AdminPolicy)]
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _adminService;
@@ -18,7 +21,10 @@ namespace Application.API.Controllers
         public async Task<IActionResult> GetUserById(Guid userId)
         {
             var user = await _adminService.GetUserById(userId);
-            return Ok(user);
+            if (user != null)
+                return Ok(user);
+            else
+                return NotFound();
         }
 
         [HttpPut("User")]
@@ -32,7 +38,10 @@ namespace Application.API.Controllers
         public async Task<IActionResult> DeleteUser(Guid userId)
         {
             var result = await _adminService.DeleteUser(userId);
-            return Ok(result);
+            if (result == "Action Successful")
+                return Ok(result);
+            else 
+                return NotFound();
         }
     }
 }

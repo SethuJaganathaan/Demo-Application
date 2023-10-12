@@ -41,34 +41,43 @@ public partial class ApplicationContext : DbContext
     {
         modelBuilder.Entity<Department>(entity =>
         {
-            entity.HasKey(e => e.DepartmentId).HasName("PK__Departme__B2079BEDD8F21995");
+            entity.HasKey(e => e.DepartmentId).HasName("PK__Departme__B2079BEDE0DBE378");
 
             entity.ToTable("Department");
 
             entity.Property(e => e.DepartmentId).ValueGeneratedNever();
-            entity.Property(e => e.DepartmentName).HasMaxLength(30);
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            entity.Property(e => e.DepartmentName)
+                .IsRequired()
+                .HasMaxLength(255);
         });
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__Role__8AFACE1A66ECD390");
+            entity.HasKey(e => e.RoleId).HasName("PK__Role__8AFACE1A29DBCA13");
 
             entity.ToTable("Role");
 
             entity.Property(e => e.RoleId).ValueGeneratedNever();
-            entity.Property(e => e.Rolename).HasMaxLength(30);
+            entity.Property(e => e.Rolename)
+                .IsRequired()
+                .HasMaxLength(255);
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CC4C77B045BB");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CC4C3064FD0B");
 
             entity.Property(e => e.UserId).ValueGeneratedNever();
-            entity.Property(e => e.Email).HasMaxLength(50);
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
-            entity.Property(e => e.Password).HasMaxLength(100);
-            entity.Property(e => e.Username).HasMaxLength(50);
+            entity.Property(e => e.Email)
+                .IsRequired()
+                .HasMaxLength(255);
+            entity.Property(e => e.Password)
+                .IsRequired()
+                .HasMaxLength(255);
+            entity.Property(e => e.ProfilePicture).IsRequired();
+            entity.Property(e => e.Username)
+                .IsRequired()
+                .HasMaxLength(255);
 
             entity.HasOne(d => d.Department).WithMany(p => p.Users)
                 .HasForeignKey(d => d.DepartmentId)

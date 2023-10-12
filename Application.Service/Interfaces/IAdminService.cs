@@ -1,11 +1,11 @@
 ﻿using Application.Repository.DTO.Admin;
-using Application.Repository.Entities;
+using Application.Repository.DTO.User;
 
 namespace Application.Service.Interfaces
 {
     public interface IAdminService
     {
-        Task<User> GetUserById(Guid userId);
+        Task<UserDTO> GetUserById(Guid userId);
 
         Task<string> DeleteUser(Guid userId);
 

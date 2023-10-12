@@ -1,7 +1,9 @@
 ﻿using Application.Repository.Context;
 using Application.Repository.DTO.Common;
+using Application.Repository.Enums;
 using Application.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Application.Repository.Repositories
 {
@@ -15,26 +17,43 @@ namespace Application.Repository.Repositories
 
         public async Task<object> UserManagementByRoleid(Guid Roleid)
         {
-            bool isSuperAdmin = Roleid == new Guid("564C7BAC-C729-470C-90B1-FFDDC7B85747");
+            if (Roleid == Guid.Empty)
+            {
+                return new { Message = "Invalid Roleid" };
+            }
 
-            return isSuperAdmin
-                ? await (from Roles in _dbcontext.Roles
-                         join users in _dbcontext.Users on Roles.RoleId equals users.RoleId
-                         select new AdminUserDTO
-                         {
-                             Id = users.Id,
-                             UserId = users.UserId,
-                             DepartmentId = users.DepartmentId ?? Guid.Empty,
-                             Username = users.Username,
-                             Email = users.Email,
-                             ProfilePicture = users.ProfilePicture,
-                             Status = users.Status ?? false,
-                         }).ToListAsync()
-                : new
-                {
-                    UserCount = await _dbcontext.Users.CountAsync(u => u.RoleId == Roleid),
-                    SuperAdminCount = await _dbcontext.Users.CountAsync(u => u.RoleId == new Guid("564C7BAC-C729-470C-90B1-FFDDC7B85747"))
-                };
+            var superAdminRole = await _dbcontext.Roles
+                .FirstOrDefaultAsync(r => r.Rolename == CommonConstant.Role.Admin);
+
+            if (superAdminRole == null)
+            {
+                return new { Message = "SuperAdmin role not found" };
+            }
+
+            bool isSuperAdmin = Roleid == superAdminRole.RoleId;
+
+            if (isSuperAdmin)
+            {
+                var superAdminUsers = await (from Roles in _dbcontext.Roles
+                                             join users in _dbcontext.Users on Roles.RoleId equals users.RoleId
+                                             select new AdminUserDTO
+                                             {
+                                                 UserId = users.UserId,
+                                                 DepartmentId = users.DepartmentId ?? Guid.Empty,
+                                                 Username = users.Username,
+                                                 Email = users.Email,
+                                                 ProfilePicture = users.ProfilePicture,
+                                             }).ToListAsync();
+
+                return superAdminUsers; 
+            }
+
+            return new
+            {
+                UserCount = await _dbcontext.Users.CountAsync(u => u.RoleId == Roleid),
+                AdminCount = await _dbcontext.Users.CountAsync(u => u.RoleId == superAdminRole.RoleId)
+            };
         }
+
     }
 }
