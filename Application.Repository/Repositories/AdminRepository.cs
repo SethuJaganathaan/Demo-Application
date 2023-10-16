@@ -37,28 +37,40 @@ namespace Application.Repository.Repositories
         public async Task<UserDTO> GetUserById(Guid userId)
         {
             if (userId == Guid.Empty)
+            {
                 return new UserDTO
                 {
                     message = notfound
                 };
+            }
 
             var query = await (from user in _dbcontext.Users
-                        where user.UserId == userId
-                        join role in _dbcontext.Roles on user.RoleId equals role.RoleId
-                        join department in _dbcontext.Departments on user.DepartmentId equals department.DepartmentId
-                        select new UserDTO
-                        {
-                           UserId = user.UserId,
-                           RoleName = role.Rolename,
-                           DepartmentName = department.DepartmentName,
-                           Username = user.Username,
-                           Email = user.Email,
-                           ProfilePicture = user.ProfilePicture,
-                           Status = user.Status
-                        }).FirstOrDefaultAsync();
+                               where user.UserId == userId
+                               join role in _dbcontext.Roles on user.RoleId equals role.RoleId
+                               join department in _dbcontext.Departments on user.DepartmentId equals department.DepartmentId
+                               select new UserDTO
+                               {
+                                   UserId = user.UserId,
+                                   RoleName = role.Rolename,
+                                   DepartmentName = department.DepartmentName,
+                                   Username = user.Username,
+                                   Email = user.Email,
+                                   ProfilePicture = user.ProfilePicture,
+                                   Status = user.Status
+                               }).FirstOrDefaultAsync();
+
+            if (query == null)
+            {
+                return new UserDTO
+                {
+                    message = "User not found"
+                };
+            }
 
             return query;
         }
+
+
 
         public async Task<string> UpdateUser(Guid userId, UserUpdateDTO user)
         {
